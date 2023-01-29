@@ -1,0 +1,39 @@
+version: "2.1"
+services:
+  base_db:
+    image: "postgres:12.2-alpine"
+    ports:
+      - "5432:5432"
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: todo_app_remake
+    volumes:
+        - ./dbdata:/var/lib/postgresql/data/:delegated
+    restart: unless-stopped
+
+  base_api:
+    container_name: base_api
+    build:
+      context: ./api
+    volumes:
+      - ./api:/code:delegated
+    ports:
+      - "8000:8000"
+    tty: true
+    depends_on:
+      - base_db
+  base_nginx:
+    container_name: base_nginx
+    build:
+      context: ./public
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./public/:/resource/public
+      - ./ssl:/resource/ssl
+    ports:
+        - "443:443"
+        - "80:80"
+    depends_on:
+        - base_api
+    
