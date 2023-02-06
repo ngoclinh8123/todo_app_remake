@@ -1,5 +1,15 @@
 from django.urls import path
-from .views import TodoPageView, TodoAddItem, TodoDetail
+from .views import (
+    TodoPageView,
+    TodoAddItem,
+    TodoDetail,
+    Login,
+    Register,
+    TodoView,
+    Token,
+)
+
+# from .custom_token import MyTokenRefreshView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -12,4 +22,8 @@ urlpatterns = [
     path("list/", TodoPageView.as_view()),
     path("add/", TodoAddItem.as_view()),
     path("detail/<int:pk>/", TodoDetail.as_view()),
+    path("login/", Login.as_view()),
+    path("register/", Register.as_view()),
+    # path("refresh/", MyTokenRefreshView.as_view()),
+    path("refresh/", Token.as_view()),
 ]
